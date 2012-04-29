@@ -316,17 +316,6 @@ $mimetypes = $grouped;
                                                 <?php
                                             }
                                         }
-                                        ?>
-                                        <tr>
-                                            <td><?php echo $param['name']; ?></td>
-                                                <td class="param-required">
-                                                    <?php
-                                                        echo isset($subparam['required']) && $subparam['required'] == '1'
-                                                        ? '<strong>&#10003;</strong>' : '<strong>&#10007;</strong>'
-                                                    ?>
-                                                </td>
-                                        </tr>
-                                        <?php
                                     }
                                     ?>
                                 </table>
