@@ -277,13 +277,75 @@ $mimetypes = $grouped;
         </div>
 
         <?php
+        foreach ($actions as $action) {
+            if ($action['route'] === '/') {
+            ?>
+                <div class="action root" hash="<?php echo $action['hash']; ?>">
+                    <div class="top">
+                        <span class="name" hash="<?php echo $action['hash']; ?>"><?php echo $action['name'] ?></span>
+                        <span class="route"><em>Click to show</em></span>
+                    </div>
+                    <div class="stub" id="action-<?php echo $action['hash']; ?>">
+                        <div class="doc-subdata">
+                            <?php
+                            if (isset($action['parameters']) && !empty($action['parameters']) && count($action['parameters'])) {
+                                ?>
+                                <h3>Parameters</h3>
+                                <table class="doc-table">
+                                    <tr>
+                                        <th class="param-name">Name</th>
+                                        <th class="param-required">Required</th>
+                                    </tr>
+                                    <?php
+                                    foreach ($action['parameters'] as $key => $param) {
+                                        if (is_array($param) && isset($param[0])) {
+                                            foreach ($param as $subkey => $subparam) {
+                                                ?>
+                                                <tr>
+                                                    <td class="param-name"><?php echo $subparam['name'] ?></td>
+                                                    <td class="param-required">
+                                                        <?php
+                                                            echo isset($subparam['required']) && $subparam['required'] == '1'
+                                                                ? '<strong>&#10003;</strong>' : '<strong>&#10007;</strong>'
+                                                        ?>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                </table>
+                                <?php
+                            }
+                            if (!empty($action['description'])) {
+                                ?>
+                                <div class="description"><?php echo MarkdownExtended($action['description']); ?></div>
+                                <?php
+                            } else {
+                                ?>
+                                <h3 class="desc">Description</h3>
+                                <p class="description">This API call has no description :-(</p>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            <?php
+            }
+        }
+        ?>
+
+        <h2>Actions</h2>
+        <?php
         if (count($actions)) {
             foreach ($actions as $action) {
-                if ($action['enabled'] != 1) {
+                if ($action['enabled'] != 1 || $action['route'] === '/') {
                     continue;
                 }
                 ?>
-                <div class="action <?php if ($action['route'] == '/') { echo 'root'; } ?>" hash="<?php echo $action['hash']; ?>">
+                <div class="action <?php if ($action['route'] === '/') { echo 'root'; } ?>" hash="<?php echo $action['hash']; ?>">
                     <div class="top">
                         <span class="name" hash="<?php echo $action['hash']; ?>"><?php echo $action['name'] ?></span>
                         <span class="route"><?php echo (isset($action['route']) && $action['route'] != '/') ? $action['route'] : '<em>Click to show</em>'; ?></span>
@@ -336,9 +398,6 @@ $mimetypes = $grouped;
                     </div>
                 </div>
                 <?php
-                if ($action['route'] == '/') {
-                    echo '<h2>Actions</h2>';
-                }
             }
         }
         ?>
