@@ -500,8 +500,8 @@ class Frapi_Controller_Main
 
 
         foreach ($outputs as $output) {
-            if (in_array(strtolower($extension), $output['extensions'])) {
-                return $output['mimetype'];
+            if (strcmp(strtoupper($extension), $output['name']) === 0) {
+                return $output['name'];
             }
         }
     }
